@@ -55,6 +55,7 @@ PortTest::~PortTest()
 
 RTC::ReturnCode_t PortTest::onInitialize()
 {
+    //コンポーネント初期化時に1個だけポートを追加する
     addTimedLongPort();
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
@@ -82,7 +83,8 @@ RTC::ReturnCode_t PortTest::onInitialize()
 
 RTC::ReturnCode_t PortTest::onFinalize()
 {
-    
+
+    //追加したポートを削除する
     for (auto& port : m_port_list)
     {
         removeInPort(port->m_inIn);
@@ -153,16 +155,19 @@ RTC::ReturnCode_t PortTest::onFinalize()
 //  return RTC::RTC_OK;
 //}
 
+//ポート追加用の関数を定義
 TimedLongPort* PortTest::addTimedLongPort()
 {
+    //ポート名を「inport_{ポート数}」に設定する
     std::string name = "inport_" + std::to_string(m_port_count);
     m_port_count++;
     TimedLongPort* port = new TimedLongPort(name);
+    //コネクタリスナを設定する
     port->m_inIn.addConnectorListener(RTC::ConnectorListenerType::ON_CONNECT,
         new ConnListener(this));
     //port->m_inIn.addConnectorListener(RTC::ConnectorListenerType::ON_DISCONNECT,
     //    new DisConnListener(this, port));
-
+    //ポートを追加する
     addInPort(name.c_str(), port->m_inIn);
     m_port_list.push_back(port);
 
@@ -177,10 +182,13 @@ void PortTest::removeTimedLongPort(TimedLongPort* port)
 }
 */
 
+//ポート接続時に呼ばれるコールバック関
 RTC::ConnectorListener::ReturnCode ConnListener::operator()(RTC::ConnectorInfo& info)
 {
+    //次のポート未生成の場合にポートを新規作成する
     if(!m_created)
     {
+        //PortTestコンポーネントのaddTimedLongPort関数を呼ぶ
         m_comp->addTimedLongPort();
     }
     m_created = true;

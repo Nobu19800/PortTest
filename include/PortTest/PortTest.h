@@ -36,7 +36,8 @@
 class PortTest;
 class TimedLongPort;
 
-
+//コネクタリスナを定義する
+//コネクタ接続時にコールバック関数operator()が呼ばれた時にポートを追加する
 class ConnListener
     : public RTC::ConnectorListener
 {
