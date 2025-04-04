@@ -1,0 +1,54 @@
+# PortTest CMake config file
+#
+# This file sets the following variables:
+# PortTest_FOUND - Always TRUE.
+# PortTest_INCLUDE_DIRS - Directories containing the PortTest include files.
+# PortTest_IDL_DIRS - Directories containing the PortTest IDL files.
+# PortTest_LIBRARIES - Libraries needed to use PortTest.
+# PortTest_DEFINITIONS - Compiler flags for PortTest.
+# PortTest_VERSION - The version of PortTest found.
+# PortTest_VERSION_MAJOR - The major version of PortTest found.
+# PortTest_VERSION_MINOR - The minor version of PortTest found.
+# PortTest_VERSION_REVISION - The revision version of PortTest found.
+# PortTest_VERSION_CANDIDATE - The candidate version of PortTest found.
+
+message(STATUS "Found PortTest-@PROJECT_VERSION@")
+set(PortTest_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(PortTest_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(PortTest_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(PortTest_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(PortTest_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(PortTest_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(PortTest_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(PortTest_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(PortTest_VERSION @PROJECT_VERSION@)
+set(PortTest_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(PortTest_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(PortTest_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(PortTest_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
